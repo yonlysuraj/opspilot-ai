@@ -19,7 +19,7 @@ OpsPilot passed **18 of 18 checks** across six scenarios repeated three times on
 
 ## Limits and failures
 
-The missing-project case passed when the workflow reported the expected failure. All cases met their criteria in the three trials. During Phase 4, an earlier evaluation missed the MCP startup deadline while dependency installs ran. The project now configures the MCP startup and per-tool limits separately. [Phase 4 verification](../planner.md#phase-4--verify-reliability-and-reproducibility)
+The missing-project case passed when the workflow reported the expected failure. All cases met their criteria in the three trials. An earlier evaluation missed the MCP startup deadline while dependency installs ran. The project now configures the MCP startup and per-tool limits separately.
 
 These results describe a six-scenario synthetic workload on one machine. The deterministic suite separately covers unavailable dependencies, timeouts, and untrusted document instructions. There is no measured throughput or cold-start benchmark in this report.
 

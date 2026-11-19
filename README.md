@@ -94,5 +94,3 @@ $env:OLLAMA_NO_CLOUD = "1"
 # In another terminal, with frontend dependencies installed
 node .\.local\phase2-npm\package\bin\npm-cli.js --prefix frontend run dev
 ```
-
-[Implementation planner](planner.md)
