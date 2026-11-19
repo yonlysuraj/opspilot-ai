@@ -1,0 +1,43 @@
+services:
+  ollama:
+    image: ollama/ollama:0.35.1
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NO_CLOUD: "1"
+    volumes:
+      - models:/root/.ollama
+
+  api:
+    build:
+      context: .
+    network_mode: "service:ollama"
+    depends_on:
+      ollama:
+        condition: service_started
+        restart: true
+    environment:
+      OPSPILOT_DB_PATH: /var/lib/opspilot/opspilot.sqlite3
+      OPSPILOT_OLLAMA_URL: http://127.0.0.1:11434
+      OPSPILOT_OLLAMA_MODEL: ${OPSPILOT_OLLAMA_MODEL:-qwen3:1.7b}
+      OPSPILOT_EMBEDDING_MODEL: ${OPSPILOT_EMBEDDING_MODEL:-nomic-embed-text}
+      OPSPILOT_APPROVER_TOKEN: ${OPSPILOT_APPROVER_TOKEN:-}
+    volumes:
+      - records:/var/lib/opspilot
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/health/live', timeout=3).close()"]
+      interval: 10s
+      timeout: 4s
+      retries: 5
+
+  web:
+    build:
+      context: frontend
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+
+volumes:
+  models:
+  records:
