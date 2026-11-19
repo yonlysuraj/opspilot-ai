@@ -10,6 +10,35 @@ The stack uses React, FastAPI, LangGraph, MCP over stdio, SQLite, and ChromaDB. 
 
 ![OpsPilot AI Overview after a cited run and two approval decisions](docs/dashboard.jpg)
 
+## Workflow design
+
+```mermaid
+flowchart TD
+    request["Submit a request in Agent Workspace"] --> run["FastAPI creates a run"]
+    run --> route{"LangGraph routes the request using local Ollama"}
+
+    route -->|Triage overdue work| tasks["MCP reads tasks and verifies blockers"]
+    tasks --> evidence{"Did the request ask for sources?"}
+    evidence -->|Yes| search["Search indexed runbooks and attach citations"]
+    evidence -->|No| draft["Generate and save unsent follow-up drafts"]
+    search --> draft
+    route -->|Project status or document question| lookup["Read project data or search documents through MCP"]
+    draft --> record["Persist the run outcome in SQLite"]
+    lookup --> record
+
+    route -->|Task status change| proposal["MCP records the proposed change"]
+    proposal --> pause["Save a LangGraph checkpoint and pause"]
+    pause --> review{"Authorized decision in Approval Center"}
+    review -->|Approve| apply["Record the approval and apply the change in one transaction"]
+    review -->|Reject| reject["Record the rejection and preserve the task status"]
+    apply --> resume["Resume the workflow from its checkpoint"]
+    reject --> resume
+    resume --> record
+    record --> dashboard["Inspect the result and tool calls in Workflow Trace"]
+```
+
+FastAPI records MCP step IDs and durations as tools finish. The dashboard polls the run, so a reviewer can see a paused proposal and return later to inspect its decision. Document citations open the indexed passage at its PDF page or TXT line range. [Component architecture](docs/architecture.md)
+
 ## Quick start
 
 Install **Python 3.12**, **uv 0.13.9**, **Node.js 24 with npm**, and **Ollama**. The commands below use PowerShell. On macOS or Linux, use your shell’s equivalent for copying `.env.example` and setting environment variables. [Install uv](https://docs.astral.sh/uv/getting-started/installation/) · [Ollama setup](https://docs.ollama.com/)
@@ -66,7 +95,7 @@ uv run --locked --extra test python evaluation/run.py
 
 The automated suite uses deterministic model substitutes where needed. The smoke test calls the running API. The live evaluator uses Ollama and a temporary, seeded database. It checks tool sequences, evidence, drafts, and decision side effects. The portfolio benchmark passed 18 of 18 checks across three repetitions. [Measured benchmark and limitations](docs/benchmark.md)
 
-GitHub Actions defines Windows and Ubuntu test jobs, a frontend build, and Docker image builds. The compose and workflow definitions passed local configuration checks. See the planner for the verification status.
+GitHub Actions defines Windows and Ubuntu test jobs, a frontend build, and Docker image builds. The Compose and workflow definitions passed local configuration checks. [Hosted workflow runs](https://github.com/yonlysuraj/opspilot-ai/actions/workflows/checks.yml)
 
 ## Run with Docker Compose
 
