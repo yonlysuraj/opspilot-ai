@@ -1,0 +1,331 @@
+{
+  "host": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.14",
+    "cpu": "Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz",
+    "logical_processors": 8,
+    "usable_memory_gib": 15.84,
+    "inference_device": "cpu"
+  },
+  "ollama_version": "0.35.1",
+  "model_digests": {
+    "qwen3:1.7b": "0f45bae8cd2fec097cf09b400b078cf42388a1f5702f4058d2d6d641a09db46d",
+    "nomic-embed-text": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+  },
+  "conditions": "Sequential trials with fresh databases and an already-running local Ollama. Model residency is not reset between trials. Timings cover API submission through verification of each case.",
+  "passed": 18,
+  "total": 18,
+  "cases": [
+    {
+      "id": "empty_knowledge",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 5263.7,
+      "min_ms": 5125.55,
+      "max_ms": 5645.84
+    },
+    {
+      "id": "overdue_with_runbooks",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 21393.2,
+      "min_ms": 20607.55,
+      "max_ms": 21501.28
+    },
+    {
+      "id": "project_status",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 4227.0,
+      "min_ms": 4215.71,
+      "max_ms": 4437.45
+    },
+    {
+      "id": "unknown_project",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 4482.45,
+      "min_ms": 4345.61,
+      "max_ms": 4598.65
+    },
+    {
+      "id": "approval_with_retry",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 5253.52,
+      "min_ms": 4909.03,
+      "max_ms": 5904.26
+    },
+    {
+      "id": "rejection",
+      "passed": 3,
+      "trials": 3,
+      "median_ms": 5274.7,
+      "min_ms": 5219.67,
+      "max_ms": 6205.86
+    }
+  ],
+  "trials": [
+    {
+      "recorded_at_utc": "2026-11-19T17:21:23.785081+00:00",
+      "platform": "Windows",
+      "chat_model": "qwen3:1.7b",
+      "embedding_model": "nomic-embed-text",
+      "passed": 6,
+      "total": 6,
+      "cases": [
+        {
+          "id": "empty_knowledge",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "1a8ee3d8-5e21-4678-a244-4876f8b53d3f",
+          "duration_ms": 5263.7,
+          "run_status": "succeeded",
+          "tools": [
+            "search_documents"
+          ]
+        },
+        {
+          "id": "overdue_with_runbooks",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "d76aaabd-69d2-481f-81b9-b144f2768228",
+          "duration_ms": 21393.2,
+          "run_status": "succeeded",
+          "tools": [
+            "list_tasks",
+            "get_task_details",
+            "get_task_details",
+            "search_documents",
+            "search_documents",
+            "create_followup_draft",
+            "create_followup_draft"
+          ]
+        },
+        {
+          "id": "project_status",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "0f72e3f8-bf73-44cc-b6be-60bd23c476cd",
+          "duration_ms": 4215.71,
+          "run_status": "succeeded",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "unknown_project",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "72371877-4bc4-40eb-bbf1-b49ae7352450",
+          "duration_ms": 4598.65,
+          "run_status": "failed",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "approval_with_retry",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "c6af86d6-7187-4bbb-b337-b912e78e6b3b",
+          "duration_ms": 5253.52,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        },
+        {
+          "id": "rejection",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "bc48712c-a3e9-429f-9be3-a69077c722d4",
+          "duration_ms": 5274.7,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        }
+      ],
+      "deterministic_only": [
+        "run_timeout",
+        "dependency_unavailable",
+        "untrusted_document"
+      ]
+    },
+    {
+      "recorded_at_utc": "2026-11-19T17:22:15.744032+00:00",
+      "platform": "Windows",
+      "chat_model": "qwen3:1.7b",
+      "embedding_model": "nomic-embed-text",
+      "passed": 6,
+      "total": 6,
+      "cases": [
+        {
+          "id": "empty_knowledge",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "3bcba106-6442-4036-b491-489177eec82e",
+          "duration_ms": 5125.55,
+          "run_status": "succeeded",
+          "tools": [
+            "search_documents"
+          ]
+        },
+        {
+          "id": "overdue_with_runbooks",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "a3ac8bb8-afac-4d6c-8a26-0b21eebcf671",
+          "duration_ms": 20607.55,
+          "run_status": "succeeded",
+          "tools": [
+            "list_tasks",
+            "get_task_details",
+            "get_task_details",
+            "search_documents",
+            "search_documents",
+            "create_followup_draft",
+            "create_followup_draft"
+          ]
+        },
+        {
+          "id": "project_status",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "288e4641-c8cc-495b-a9da-d0527641d744",
+          "duration_ms": 4437.45,
+          "run_status": "succeeded",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "unknown_project",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "f90a4910-6304-460a-b386-f99042864b3e",
+          "duration_ms": 4345.61,
+          "run_status": "failed",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "approval_with_retry",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "5718f0bb-7679-4262-8ee1-fb44dd760c10",
+          "duration_ms": 4909.03,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        },
+        {
+          "id": "rejection",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "f2a92bdf-076c-47c1-8eef-1e62b1b96180",
+          "duration_ms": 6205.86,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        }
+      ],
+      "deterministic_only": [
+        "run_timeout",
+        "dependency_unavailable",
+        "untrusted_document"
+      ]
+    },
+    {
+      "recorded_at_utc": "2026-11-19T17:23:10.309238+00:00",
+      "platform": "Windows",
+      "chat_model": "qwen3:1.7b",
+      "embedding_model": "nomic-embed-text",
+      "passed": 6,
+      "total": 6,
+      "cases": [
+        {
+          "id": "empty_knowledge",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "93f87c73-3c7a-4f86-b4c6-bed0b3093af3",
+          "duration_ms": 5645.84,
+          "run_status": "succeeded",
+          "tools": [
+            "search_documents"
+          ]
+        },
+        {
+          "id": "overdue_with_runbooks",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "ccf5ff76-ea72-4765-b196-ed84d4f60fd5",
+          "duration_ms": 21501.28,
+          "run_status": "succeeded",
+          "tools": [
+            "list_tasks",
+            "get_task_details",
+            "get_task_details",
+            "search_documents",
+            "search_documents",
+            "create_followup_draft",
+            "create_followup_draft"
+          ]
+        },
+        {
+          "id": "project_status",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "7086b338-eef7-4dfb-8227-1fc9aec0d124",
+          "duration_ms": 4227.0,
+          "run_status": "succeeded",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "unknown_project",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "6551bf50-66d9-4724-a55d-6576193061b9",
+          "duration_ms": 4482.45,
+          "run_status": "failed",
+          "tools": [
+            "get_project_status"
+          ]
+        },
+        {
+          "id": "approval_with_retry",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "8bc6db0a-4454-4be6-9fd7-a8493a66363f",
+          "duration_ms": 5904.26,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        },
+        {
+          "id": "rejection",
+          "passed": true,
+          "failed_check": null,
+          "run_id": "2ce885e9-6e47-4914-9663-e2f62a2a66d1",
+          "duration_ms": 5219.67,
+          "run_status": "awaiting_approval",
+          "tools": [
+            "propose_task_update"
+          ]
+        }
+      ],
+      "deterministic_only": [
+        "run_timeout",
+        "dependency_unavailable",
+        "untrusted_document"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "recorded_at_utc": "2026-11-19T17:16:57.391559+00:00",
+  "platform": "Windows",
+  "chat_model": "qwen3:1.7b",
+  "embedding_model": "nomic-embed-text",
+  "passed": 6,
+  "total": 6,
+  "cases": [
+    {
+      "id": "empty_knowledge",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "df8cb42c-965a-405c-bdd8-e87c80573f93",
+      "duration_ms": 5362.09,
+      "run_status": "succeeded",
+      "tools": [
+        "search_documents"
+      ]
+    },
+    {
+      "id": "overdue_with_runbooks",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "d5c59e33-2ba5-4db7-9136-411beabd3098",
+      "duration_ms": 24645.39,
+      "run_status": "succeeded",
+      "tools": [
+        "list_tasks",
+        "get_task_details",
+        "get_task_details",
+        "search_documents",
+        "search_documents",
+        "create_followup_draft",
+        "create_followup_draft"
+      ]
+    },
+    {
+      "id": "project_status",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "0d891096-3a09-4bc3-8e54-56caa5a06a73",
+      "duration_ms": 5507.09,
+      "run_status": "succeeded",
+      "tools": [
+        "get_project_status"
+      ]
+    },
+    {
+      "id": "unknown_project",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "9654f9f6-2cd5-48c8-a2c7-34b83f08f267",
+      "duration_ms": 4845.21,
+      "run_status": "failed",
+      "tools": [
+        "get_project_status"
+      ]
+    },
+    {
+      "id": "approval_with_retry",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "c35e3f7e-0934-47f3-b6e6-8d5e19dd9489",
+      "duration_ms": 4809.94,
+      "run_status": "awaiting_approval",
+      "tools": [
+        "propose_task_update"
+      ]
+    },
+    {
+      "id": "rejection",
+      "passed": true,
+      "failed_check": null,
+      "run_id": "112f45d2-83bc-4cf3-9384-dfe5a9dd69b7",
+      "duration_ms": 5947.16,
+      "run_status": "awaiting_approval",
+      "tools": [
+        "propose_task_update"
+      ]
+    }
+  ],
+  "deterministic_only": [
+    "run_timeout",
+    "dependency_unavailable",
+    "untrusted_document"
+  ]
+}

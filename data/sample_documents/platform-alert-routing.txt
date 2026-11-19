@@ -1,0 +1,5 @@
+Platform Reliability — alert routing recovery
+
+PLAT-201 tracks restoration of alert routing. The on-call webhook is awaiting rotation, which blocks the staging alert delivery check.
+
+Jordan Lee owns restoration. Rotate the webhook through the on-call rotation process, send a staging test alert, and verify receipt before closing the ticket.

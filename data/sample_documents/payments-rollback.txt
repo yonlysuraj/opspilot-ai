@@ -1,0 +1,5 @@
+Payments Migration — staging rollback runbook
+
+PAY-104 validates the rollback path before the next release window. The staging replay worker currently lacks test credentials, so it cannot replay the payment events needed for the rollback check.
+
+Anika Rao owns the validation. Request scoped staging credentials through the test-environment access queue, then rerun the payment-event replay and capture the rollback verification result.
