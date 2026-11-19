@@ -1,5 +1,7 @@
 # OpsPilot AI
 
+[![Local stack checks](https://github.com/yonlysuraj/opspilot-ai/actions/workflows/checks.yml/badge.svg)](https://github.com/yonlysuraj/opspilot-ai/actions/workflows/checks.yml)
+
 OpsPilot AI is a local agent workspace for triaging engineering work. It finds overdue tickets, verifies blockers, searches project runbooks for evidence, and saves follow-up drafts. A task status change pauses for an authorized decision. The dashboard shows the run history, citations, tool calls, and approval outcome.
 
 The stack uses React, FastAPI, LangGraph, MCP over stdio, SQLite, and ChromaDB. Ollama runs chat and embeddings locally. The demo needs no hosted AI account or API key.
