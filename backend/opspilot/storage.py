@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS documents (
     status TEXT NOT NULL, chunk_count INTEGER NOT NULL DEFAULT 0,
     error TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
 );
+CREATE INDEX IF NOT EXISTS document_runbook ON documents(requester_id, filename);
 CREATE TABLE IF NOT EXISTS document_chunks (
     id TEXT PRIMARY KEY, document_id TEXT NOT NULL REFERENCES documents(id),
     location TEXT NOT NULL, excerpt TEXT NOT NULL

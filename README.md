@@ -84,6 +84,8 @@ npm --prefix frontend run dev
 
 The demo uses a single seeded requester, Maya Chen. The approver token enables local task status decisions. The agent can save drafts and create proposals. The approval handler applies approved changes. PDF uploads require selectable text, and uploads are limited to 4 MB.
 
+To update a runbook, upload the revised file in **Knowledge Base** using the same filename. New searches use the latest successfully indexed revision. If indexing fails, the previous revision stays searchable. Citations from earlier runs still open the exact passage from the version they used.
+
 ## Tests and evaluation
 
 ```powershell

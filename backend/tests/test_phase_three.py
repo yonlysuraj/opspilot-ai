@@ -164,7 +164,7 @@ def test_pdf_txt_search_and_stable_source(embed_service):
         assert txt["status"] == "indexed", txt
         pdf = upload("alerts.pdf", sample_pdf())
         assert pdf["status"] == "indexed", pdf
-        assert upload("copy.txt", b"Staging rollback uses replay credentials.")["id"] == txt["id"]
+        assert upload("rollback.txt", b"Staging rollback uses replay credentials.")["id"] == txt["id"]
         broken = upload("empty.txt", b"\n\n")
         assert broken["status"] == "failed"
         for query, document, location in (
@@ -177,6 +177,42 @@ def test_pdf_txt_search_and_stable_source(embed_service):
     with TestClient(create_app(embed_service)) as api:
         assert len(api.get("/api/knowledge/documents").json()) == 3
         assert api.post("/api/knowledge/search", json={"query": "rollback"}).json()["items"][0]["document_id"] == txt["id"]
+
+
+def test_revised_runbook_replaces_search_results_and_preserves_citations(embed_service):
+    with TestClient(create_app(embed_service)) as api:
+        def upload(name, data):
+            response = api.post("/api/knowledge/documents", files={"file": (name, data)})
+            assert response.is_success, response.text
+            return response.json()
+
+        def search():
+            return api.post("/api/knowledge/search", json={"query": "rollback"}).json()["items"]
+
+        original_text = b"Rollback uses the old procedure."
+        original = upload("rollback.txt", original_text)
+        old_citation, = search()
+        assert old_citation["document_id"] == original["id"]
+
+        assert upload("rollback.txt", b"\n\n")["status"] == "failed"
+        assert search() == [old_citation]
+
+        revised_text = b"Rollback uses the updated procedure."
+        revised = upload("rollback.txt", revised_text)
+        assert revised["status"] == "indexed"
+        assert revised["id"] != original["id"]
+        new_citation, = search()
+        assert new_citation["document_id"] == revised["id"]
+        assert revised_text.decode() in new_citation["excerpt"]
+        assert upload("rollback.txt", original_text)["id"] == original["id"]
+        assert search() == [new_citation]
+
+        independent = upload("another-runbook.txt", revised_text)
+        assert independent["id"] != revised["id"]
+
+    with TestClient(create_app(embed_service)) as api:
+        assert api.get(f"/api/knowledge/sources/{old_citation['id']}").json() == old_citation
+        assert {item["document_id"] for item in search()} == {revised["id"], independent["id"]}
 
 
 def test_retrieved_instructions_cannot_propose_or_execute_updates(embed_service):

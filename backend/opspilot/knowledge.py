@@ -113,9 +113,17 @@ class Knowledge:
             raise KnowledgeError("Upload a nonempty PDF or TXT with a filename up to 160 characters.")
         if len(raw) > MAX_UPLOAD:
             raise KnowledgeError("Uploads are limited to 4 MB.")
-        doc_id = hashlib.sha256(requester.encode() + b"\0" + kind.encode() + b"\0" + raw).hexdigest()[:32]
+        namespace = requester.encode() + b"\0" + kind.encode() + b"\0"
+        legacy_id = hashlib.sha256(namespace + raw).hexdigest()[:32]
+        doc_id = hashlib.sha256(b"\0revision\0" + namespace + filename.encode() + b"\0" + raw).hexdigest()[:32]
         now = utc_now()
         with self.store.connect() as db:
+            legacy = db.execute(
+                "SELECT id FROM documents WHERE id = ? AND requester_id = ? AND filename = ?",
+                (legacy_id, requester, filename),
+            ).fetchone()
+            if legacy:
+                doc_id = legacy["id"]
             db.execute(
                 """INSERT INTO documents (id, requester_id, filename, format, model, raw, status, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, 'failed', ?, ?) ON CONFLICT (id) DO NOTHING""",
@@ -182,7 +190,7 @@ class Knowledge:
             row = db.execute(
                 """SELECT c.id, d.id AS document_id, d.filename, c.location, c.excerpt
                 FROM document_chunks c JOIN documents d ON d.id = c.document_id
-                WHERE c.id = ? AND d.requester_id = ? AND d.status = 'indexed'""",
+                WHERE c.id = ? AND d.requester_id = ?""",
                 (chunk_id, requester),
             ).fetchone()
         return Source.model_validate(dict(row)) if row else None
@@ -190,7 +198,14 @@ class Knowledge:
     def search(self, requester: str, query: str, limit: int) -> SearchResults:
         with self.store.connect() as db:
             ids = [row["id"] for row in db.execute(
-                "SELECT id FROM documents WHERE requester_id = ? AND status = 'indexed' AND model = ?",
+                """SELECT d.id FROM documents d
+                WHERE d.requester_id = ? AND d.status = 'indexed' AND d.model = ?
+                  AND NOT EXISTS (
+                    SELECT 1 FROM documents newer
+                    WHERE newer.requester_id = d.requester_id AND newer.filename = d.filename
+                      AND newer.rowid > d.rowid
+                      AND EXISTS (SELECT 1 FROM document_chunks c WHERE c.document_id = newer.id)
+                  )""",
                 (requester, self.settings.embedding_model),
             )]
         if not ids:

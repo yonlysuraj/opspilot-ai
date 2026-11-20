@@ -78,7 +78,7 @@ export function KnowledgeBase() {
     </section>}
     <div className="knowledge-grid">
       <section className="card section-pad">
-        <div className="feature-title"><Upload size={20} /><div><h2>Upload a document</h2><p>PDF or UTF-8 TXT, up to 4 MB</p></div></div>
+        <div className="feature-title"><Upload size={20} /><div><h2>Upload a document</h2><p>PDF or UTF-8 TXT, up to 4 MB. Use the same filename to update a runbook.</p></div></div>
         <form onSubmit={upload} className="feature-form">
           <label htmlFor="document-file">Document file</label>
           <input id="document-file" type="file" accept=".pdf,.txt,application/pdf,text/plain"
